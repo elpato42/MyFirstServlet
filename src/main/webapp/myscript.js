@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function () {
-    var $userName;
+
 
     $("#sendButton1").click(function () {
         $.post("/xyz", {"message": $("#msg").val()}, function (data) {
@@ -11,11 +11,12 @@ $(document).ready(function () {
             $("#msg").val("");
         });
     });
+
     $("#logButton").click(function () {
         if($("#login").val !== '' && $("#password").val !== ''){
             hideDiv("authorise");
             showDiv("chat");
-            $userName == $("#login").val;
+
         } else {
             //document.getElementById('text').setAttribute(m, 'Введите логин и пароль')
 
