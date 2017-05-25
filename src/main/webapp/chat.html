@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=UTF-8>
+        <link type="text/css" rel="stylesheet" href="mystyle.css">
+        <title>Tomcat WebSocket Chat</title>
+
+    </head>
+    <body>
+        <div id="text"></div>
+        <div id="authorise">
+            <h1>Имя</h1><input type="text" id="login"/>
+            <h1>Пароль</h1><input type="password" id="password"/>
+            <button type="submit" id="logButton" >Log in</button>
+
+        </div>
+        <div id="chat">
+
+        <div>
+            <textarea id="chatlog" readonly></textarea><br/>
+        </div>
+
+        <div id="messagelog">
+            <input id="msg" type="text"/>
+            <button type="submit" id="sendButton1">Send!</button>
+            <button type="submit" id="finishButton">Exit</button>
+        </div>
+        </div>
+        <script
+                src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+                crossorigin="anonymous"></script>
+
+        <script src="myscript.js"></script>
+
+    </body>
+</html>

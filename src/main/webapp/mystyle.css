@@ -1,0 +1,23 @@
+
+#chatlog {
+    width: 1000px;
+    height: 500px;
+    margin: auto;
+    display: block;
+}
+#messagelog {
+    width: 1000px;
+    height: 500px;
+    margin: auto;
+    display: block;
+}
+
+#msg {
+    width: inherit;
+}
+#sendButton1 {
+    width: 50px;
+}
+#chat {
+    display: none;
+}
