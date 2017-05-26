@@ -1,11 +1,19 @@
 $(document).ready(function () {
     var $chatLog = $('#log'), $message = $('#message'), $btn = $('#send');
 
-    $btn.click(function () {
+    $message.on('keyup', function (e) {
+        if(e.keyCode === 13){
+            postMessage();
+        }
+    });
+
+    $btn.click(postMessage);
+
+    var postMessage = function () {
         $.post("/xyz", {"message": $message.val()}, function (data) {
             $message.val('');
         });
-    });
+    };
 
     var getCallback = function (data) {
         for (var o in data) if (data.hasOwnProperty(o)) {
