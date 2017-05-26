@@ -10,11 +10,11 @@
     <div id="log"></div>
     <div id="msg">
         <input type="text" id="message">
-        <button type="button" id="send">Send!</button>
+        <button type="button" id="send"></button>
     </div>
 
     <form method="post" action="logout" enctype="application/x-www-form-urlencoded">
-        <input type="submit" value="Logout!">
+        <input type="submit" value="Logout!" class="buttons">
     </form>
 
     <script src="myscript.js"></script>
@@ -22,17 +22,19 @@
     <% if (request.getAttribute("error") != null) { %>
     <div class="errors"><%= request.getAttribute("error") %></div>
     <% } %>
+<div id="logform">
     <form method="post" action="login" enctype="application/x-www-form-urlencoded">
         <div>
-            <label for="login">Login</label>
+
             <input type="text" id="login" name="login" placeholder="Login">
         </div>
         <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="pass">
+
+            <input type="password" id="password" name="password" placeholder="Password">
         </div>
-        <input type="submit" value="Login!">
+        <input type="submit" value="Login!" class="buttons">
     </form>
+</div>
 <% } %>
 </body>
 </html>

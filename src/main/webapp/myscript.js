@@ -37,5 +37,5 @@ $(document).ready(function () {
     };
 
     $.get('/xyz', {'limit': 10}, getCallback, 'json');
-    setInterval(checkIncoming, 3000);
+    setInterval(checkIncoming, 1000);
 });

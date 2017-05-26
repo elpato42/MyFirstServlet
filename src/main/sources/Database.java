@@ -29,7 +29,7 @@ class Database {
 
         if (result.next()) {
             String dbPassword = result.getString("password");
-
+//http://www.md5.cz/
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             md5.update(StandardCharsets.UTF_8.encode(pass));
             String checkPass = String.format("%032x", new BigInteger(1, md5.digest()));
@@ -89,7 +89,7 @@ class Database {
                 PreparedStatement stmt = con.prepareStatement(
                         "SELECT m.*, u.login FROM messages m JOIN users u ON m.user_id = u.id WHERE m.date >= ? ORDER BY date DESC"
                 );
-                stmt.setTimestamp(1, new Timestamp(System.currentTimeMillis() - 3200));
+                stmt.setTimestamp(1, new Timestamp(System.currentTimeMillis() - 1200));
                 result = stmt.executeQuery();
             }
 
