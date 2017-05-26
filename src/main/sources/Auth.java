@@ -5,17 +5,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 @WebServlet(name = "Auth")
 public class Auth extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getRequestURI().substring(1);
-        Database db = new Database();
+        Database db = null;
+        try {
+            db = new Database();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         PrintWriter out = response.getWriter();
 
         if (action.equals("login")) {
-            if (db.login(request.getParameter("login"), request.getParameter("password"))) {
-                request.getSession().setAttribute("user", request.getParameter("login"));
+            try {
+                if (db.login(request.getParameter("login"), request.getParameter("password"))) {
+                    request.getSession().setAttribute("user", request.getParameter("login"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
             }
         } else if (action.equals("logout")) {
             request.getSession().invalidate();

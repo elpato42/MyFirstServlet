@@ -2,10 +2,7 @@ $(document).ready(function () {
     var $chatLog = $('#log'), $message = $('#message'), $btn = $('#send');
 
     $btn.click(function () {
-        $message.attribute('disabled', true);
-
         $.post("/xyz", {"message": $message.val()}, function (data) {
-            $message.attribute('disabled', false);
             $message.val('');
         });
     });

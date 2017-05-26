@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,7 +18,14 @@ public class MyFirstServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
-        Database db = new Database();
+        Database db = null;
+        try {
+            db = new Database();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         String user = (String) session.getAttribute("user");
 
@@ -40,9 +48,16 @@ public class MyFirstServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Database db = new Database();
+        Database db = null;
+        try {
+            db = new Database();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        if (db.createMessage((String) req.getAttribute("message"), (String) req.getSession().getAttribute("user"))) {
+        if (db.createMessage((String) req.getParameter("message"), (String) req.getSession().getAttribute("user"))) {
             resp.setStatus(201);
         } else {
             resp.setStatus(500);

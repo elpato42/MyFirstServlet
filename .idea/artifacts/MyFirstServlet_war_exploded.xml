@@ -7,6 +7,7 @@
           <element id="module-output" name="MyFirstServlet" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: postgresql:postgresql:9.0-801.jdbc4" />
           <element id="library" level="project" name="Maven: javax.websocket:javax.websocket-api:1.1" />
         </element>
       </element>
