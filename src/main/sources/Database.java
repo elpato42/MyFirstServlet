@@ -8,9 +8,17 @@ import java.util.ArrayList;
 class Database {
     private Connection con;
 
-    Database() throws SQLException, ClassNotFoundException {
-        Class.forName("org.postgresql.Driver");
-        con = DriverManager.getConnection("jdbc:postgresql://194.87.187.238/semenova","semenova", "semenova");
+    Database() {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            con = DriverManager.getConnection("jdbc:postgresql://194.87.187.238/semenova","semenova", "semenova");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     Boolean login(String user, String pass) throws SQLException, NoSuchAlgorithmException {
@@ -65,13 +73,24 @@ class Database {
         return true;
     }
 
-    ArrayList<ArrayList<String>> getMessages() {
+    ArrayList<ArrayList<String>> getMessages(String latestN) {
         ArrayList<ArrayList<String>> results = new ArrayList<ArrayList<String>>();
+        ResultSet result;
 
         try {
-            ResultSet result = con.prepareStatement(
-                "SELECT m.*, u.login FROM messages m JOIN users u ON m.user_id = u.id ORDER BY date ASC"
-            ).executeQuery();
+            if (latestN != null) {
+                PreparedStatement stmt = con.prepareStatement(
+                        "SELECT m.*, u.login FROM messages m JOIN users u ON m.user_id = u.id ORDER BY date DESC LIMIT ?"
+                );
+                stmt.setInt(1, Integer.parseInt(latestN));
+                result = stmt.executeQuery();
+            } else {
+                PreparedStatement stmt = con.prepareStatement(
+                        "SELECT m.*, u.login FROM messages m JOIN users u ON m.user_id = u.id WHERE m.date >= ? ORDER BY date DESC"
+                );
+                stmt.setTimestamp(1, new Timestamp(System.currentTimeMillis() - 3200));
+                result = stmt.executeQuery();
+            }
 
             while (result.next()) {
                 ArrayList<String> row = new ArrayList<String>();
@@ -86,5 +105,22 @@ class Database {
         }
 
         return results;
+    }
+
+    void close() {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void finalize() throws Throwable
+    {
+        try { con.close(); }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        super.finalize();
     }
 }

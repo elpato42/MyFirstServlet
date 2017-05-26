@@ -10,16 +10,10 @@ import java.sql.SQLException;
 
 @WebServlet(name = "Auth")
 public class Auth extends HttpServlet {
+    private Database db = new Database();
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getRequestURI().substring(1);
-        Database db = null;
-        try {
-            db = new Database();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         PrintWriter out = response.getWriter();
 
         if (action.equals("login")) {
