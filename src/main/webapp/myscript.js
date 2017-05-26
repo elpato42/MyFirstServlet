@@ -1,40 +1,29 @@
-/**
- * Created by Екатерина on 24.05.2017.
- */
-
 $(document).ready(function () {
+    var $chatLog = $('#log'), $message = $('#message'), $btn = $('#send');
 
+    $btn.click(function () {
+        $message.attribute('disabled', true);
 
-    $("#sendButton1").click(function () {
-        $.post("/xyz", {"message": $("#msg").val()}, function (data) {
-            $("#chatlog").val($("#chatlog").val() + "\n" + data);
-            $("#msg").val("");
+        $.post("/xyz", {"message": $message.val()}, function (data) {
+            $message.attribute('disabled', false);
+            $message.val('');
         });
     });
 
-    $("#logButton").click(function () {
-        if($("#login").val !== '' && $("#password").val !== ''){
-            hideDiv("authorise");
-            showDiv("chat");
+    var checkIncoming = function () {
+        $.get('/xyz', function (data) {
+            for (var o in data) if (data.hasOwnProperty(o)) {
+                var row = data[o];
+                $chatLog.append(
+                    '<div class="row">' +
+                        '<span class="date">' + row['date'] + '</span>' +
+                        '<span class="user">' + row['user'] + '</span>' +
+                        '<span class="message">' + row['message'] + '</span>' +
+                    '</div>'
+                )
+            }
+        }, 'json');
+    };
 
-        } else {
-            //document.getElementById('text').setAttribute(m, 'Введите логин и пароль')
-
-        }
-
-    });
-
-    $("#finishButton").click(function () {
-        showDiv("authorise");
-        hideDiv("chat");
-    });
-
-    function showDiv(id) {
-        document.getElementById(id).style.display = 'block';
-    }
-    function hideDiv(id) {
-        document.getElementById(id).style.display = 'none';
-    }
-
-
+    setInterval(checkIncoming, 3000);
 });

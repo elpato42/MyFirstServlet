@@ -2,40 +2,50 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
  * Created by Екатерина on 24.05.2017.
  */
-public class MyFirstServlet extends HttpServlet{
+public class MyFirstServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        try {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        Database db = new Database();
 
-            req.getRequestDispatcher("mypage.jsp").forward(req, resp);
-        } catch (Exception e) {PrintWriter out = resp.getWriter();
-            out.print("<h1>File is not found</h1>");}
+        String user = (String) session.getAttribute("user");
 
+        if (user != null) {
+            PrintWriter out = resp.getWriter();
+            ArrayList<ArrayList<String>> messages = db.getMessages();
 
-
+            out.print("[");
+            for (ArrayList<String> message : messages) {
+                out.print("{\"user\":\"" + message.get(0) + "\",\"message\":\"" + message.get(2) + "\",\"date\":\"" + message.get(1) + "\"}");
+            }
+            out.print("]");
+        } else {
+            PrintWriter out = resp.getWriter();
+            out.print("[{\"user\":\"SYSTEM\",\"message\":\"Authentication Failed\",\"date\":\""
+                    + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+                    + "\"}]");
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        resp.getWriter().write(req.getParameter("message"));
-        resp.setStatus(200);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Database db = new Database();
 
+        if (db.createMessage((String) req.getAttribute("message"), (String) req.getSession().getAttribute("user"))) {
+            resp.setStatus(201);
+        } else {
+            resp.setStatus(500);
+        }
     }
 }
-/*
-
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>2.2</version>
-    </dependency>
-    */
