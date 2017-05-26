@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 class Database {
     private Connection con;
@@ -98,6 +99,10 @@ class Database {
                 row.add(result.getString("date"));
                 row.add(result.getString("message"));
                 results.add(row);
+            }
+
+            if (latestN != null) {
+                Collections.reverse(results);
             }
         } catch (SQLException e) {
             e.printStackTrace();
